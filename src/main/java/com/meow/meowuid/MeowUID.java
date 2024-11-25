@@ -11,6 +11,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.scheduler.BukkitRunnable;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -131,7 +133,7 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
             if (playerUID == null) {
                 return "Unknown UID";
             } else {
-                return String.format(playerUID);// long转str
+                return String.valueOf(playerUID);// long转str
             }
         }
     }
@@ -330,7 +332,7 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
                         long uid = Long.parseLong(args[2]);
                         findIdByUid(sender, uid);
                     } catch (NumberFormatException e) {
-                        sender.sendMessage(invalidUidMessage);
+                        sender.sendMessage(InvalidUidMessage);
                     }
                 } else {
                     sender.sendMessage(usageMessage + " /muid find <id/uid> <PlayerID / PlayerUID>");
@@ -339,7 +341,7 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
             } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
                 reloadConfig();
                 loadConfig();
-                sender.sendMessage(realoadedMessage);
+                sender.sendMessage(reloadedMessage);
                 return true;
             }
         }
