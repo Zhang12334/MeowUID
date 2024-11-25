@@ -97,11 +97,12 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
         }.runTaskAsynchronously(this);
     }
 
+    @Override
     // 创建占位符扩展类
     public class MeowUIDPlaceholderExpansion extends PlaceholderExpansion {
 
         private final MeowUID plugin;
-
+        
         public MeowUIDPlaceholderExpansion(MeowUID plugin) {
             this.plugin = plugin;
         }
