@@ -16,7 +16,7 @@ public class MeowUIDPlaceholderExpansion extends PlaceholderExpansion {
     // 返回扩展标识符
     @Override
     public String getIdentifier() {
-        return "meow_uid";  // PAPI中的标识符
+        return "uid";  // PAPI中的标识符
     }
 
     // 返回作者名
