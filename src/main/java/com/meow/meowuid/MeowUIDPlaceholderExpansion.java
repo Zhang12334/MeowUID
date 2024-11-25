@@ -34,12 +34,7 @@ public class MeowUIDPlaceholderExpansion extends PlaceholderExpansion {
     // 处理占位符请求
     @Override
     public String onPlaceholderRequest(Player player, String params) {
-        if (player == null) {
-            return null;  // 如果玩家对象为null，则返回null
-        }
-
         String playerId = player.getName();
-
         // 获取玩家的 UID
         return plugin.getPlayerUID(playerId);  // 返回
     }
