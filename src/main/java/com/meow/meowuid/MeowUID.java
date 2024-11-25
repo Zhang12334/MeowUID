@@ -12,7 +12,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import me.clip.placeholderapi.PlaceholderAPI;
+import com.meow.meowuid.MeowUIDPlaceholderExpansion;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
