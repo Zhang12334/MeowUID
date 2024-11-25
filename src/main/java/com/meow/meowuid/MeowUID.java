@@ -54,6 +54,8 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
     private String playeridFoudedMessage;
     private String CanNotFoundPlayerUIDMessage;
     private String CanNotFoundPAPIMessage;
+    private String RegistUIDMessage_a;
+    private String RegistUIDMessage_b;
 
     @Override
     public void onEnable() {
