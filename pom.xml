@@ -100,7 +100,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.meow.meowjoincommand.MeowJoinCommand</mainClass>  <!-- 主类 -->
+                            <mainClass>com.meow.meowuid.MeowUID</mainClass>  <!-- 主类 -->
                         </manifest>
                     </archive>
                 </configuration>
