@@ -79,7 +79,7 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
 
         // 注册自定义占位符
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new MeowUIDPlaceholderExpansion(this).register();
+            new MeowUIDPlaceholderExpansion(this).register();  // 注册占位符扩展
         } else {
             getLogger().warning(CanNotFoundPAPIMessage);
         }
@@ -96,49 +96,6 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
             }
         }.runTaskAsynchronously(this);
     }
-
-    public class MeowUIDPlaceholderExpansion extends PlaceholderExpansion {
-
-        private final MeowUID plugin;
-
-        public MeowUIDPlaceholderExpansion(MeowUID plugin) {
-            this.plugin = plugin;
-        }
-
-        @Override
-        public String getIdentifier() {
-            return "meow_uid";  // PAPI中的标识符
-        }
-
-        @Override
-        public String getAuthor() {
-            return "Zhang1233";  // 插件作者名
-        }
-
-        @Override
-        public String getVersion() {
-            return plugin.getDescription().getVersion();  // 返回当前插件版本
-        }
-
-        @Override
-        public String onRequest(Player player, String params) {
-            if (player == null) {
-                return null;  // 如果玩家对象为null，则返回null
-            }
-
-            // 假设 plugin.FindUID() 方法返回 Long 类型，需要转换为 String
-            Long playerUIDLong = plugin.FindUID(player.getUniqueId().toString());
-            
-            if (playerUIDLong == null) {
-                return "Unknown UID";  // 如果没有找到 UID，返回 "Unknown UID"
-            }
-
-            // 转换 Long 为 String 类型
-            return String.valueOf(playerUIDLong);  // 如果找到 UID，返回它的字符串表示
-        }
-    }
-
-
 
     @Override
     public void onDisable() {
