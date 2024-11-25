@@ -266,7 +266,7 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
                 insert.setLong(2, newUid);
                 insert.executeUpdate();
                 insert.close();
-                getLogger().info(RegistUIDMessage_a + " " + playerMessage + " " + RegistUIDMessage_b + newUid);
+                getLogger().info(RegistUIDMessage_a + " " + playerId + " " + RegistUIDMessage_b + newUid);
             }
             rs.close();
             ps.close();
