@@ -97,12 +97,11 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
         }.runTaskAsynchronously(this);
     }
 
-    @Override
     // 创建占位符扩展类
     public class MeowUIDPlaceholderExpansion extends PlaceholderExpansion {
 
         private final MeowUID plugin;
-        
+
         public MeowUIDPlaceholderExpansion(MeowUID plugin) {
             this.plugin = plugin;
         }
@@ -125,19 +124,20 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
         @Override
         public String onRequest(Player player, String params) {
             if (player == null) {
-                return null;
+                return null;  // 如果玩家对象为null，则返回null
             }
 
             // 获取玩家的 UID
-            String playerUID = plugin.FindUID(player.getUniqueId().toString());  // 获取玩家UID的方法
+            String playerUID = plugin.FindUID(player.getUniqueId().toString());
 
             if (playerUID == null) {
-                return "Unknown UID";
-            } else {
-                return String.valueOf(playerUID);// long转str
+                return "Unknown UID";  // 如果没有找到 UID，返回 "Unknown UID"
             }
+
+            return playerUID;  // 如果找到 UID，直接返回该 UID
         }
     }
+
 
     @Override
     public void onDisable() {
