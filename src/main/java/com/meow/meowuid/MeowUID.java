@@ -103,7 +103,7 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
         disconnectDatabase();
     }
 
-    public String getPlayerUID(String playerId) {
+    public Long getPlayerUID(String playerId) {
         return FindUID(playerId);  // 使用内部方法
     }
 

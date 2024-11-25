@@ -1,5 +1,6 @@
 package com.meow.meowuid;
 
+import 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import com.meow.meowuid.MeowUID;
@@ -33,7 +34,7 @@ public class MeowUIDPlaceholderExpansion extends PlaceholderExpansion {
 
     // 处理占位符请求
     @Override
-    public String onRequest(Player player, String params) {
+    public String onPlaceholderRequest(Player player, String params) {
         if (player == null) {
             return null;  // 如果玩家对象为null，则返回null
         }
