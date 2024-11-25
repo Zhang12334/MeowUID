@@ -154,6 +154,8 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
             playeridFoudedMessage = "对应的玩家 ID 是:";
             CanNotFoundPlayerUIDMessage = "找不到此 UID 对应的玩家:";
             CanNotFoundPAPIMessage = "未找到 PlaceholderAPI, 无法使用变量查询玩家 UID !";
+            RegistUIDMessage_a = "已为玩家";
+            RegistUIDMessage_b = "注册UID:";
         } else if ("en_us".equalsIgnoreCase(language)) {
             // English Message
             startupMessage = "MeowUID has been loaded!";
@@ -177,6 +179,8 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
             playeridFoudedMessage = "The ID of the user is:";
             CanNotFoundPlayerUIDMessage = "Could not find the player with this UID:";
             CanNotFoundPAPIMessage = "Could not find PlaceholderAPI, unable to use variables to query player UID !";
+            RegistUIDMessage_a = "Registered UID for player";
+            RegistUIDMessage_b = ":";
         } else if ("zh_tc".equalsIgnoreCase(language)) {
             // 繁体中文消息
             startupMessage = "MeowUID 已加载!";
@@ -200,6 +204,8 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
             playeridFoudedMessage = "對應的玩家 ID 是:";
             CanNotFoundPlayerUIDMessage = "找不到此 UID 對應的玩家:";
             CanNotFoundPAPIMessage = "未找到 PlaceholderAPI, 無法使用變量查詢玩家 UID !";
+            RegistUIDMessage_a = "已為玩家";
+            RegistUIDMessage_b = "註冊UID:";
         }
     }
 
@@ -258,6 +264,7 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
                 insert.setLong(2, newUid);
                 insert.executeUpdate();
                 insert.close();
+                sender.sendMessage(RegistUIDMessage_a + " " + playerMessage + " " + RegistUIDMessage_b + newUid);
             }
             rs.close();
             ps.close();
