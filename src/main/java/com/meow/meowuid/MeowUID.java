@@ -27,7 +27,29 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
     private boolean enablePlugin;
     private long startingUid;
     private static final String TABLE_NAME = "player_uid";
-    
+
+    private String startupMessage;
+    private String shutdownMessage;
+    private String nowusingversionMessage;
+    private String checkingupdateMessage;
+    private String checkfailedMessage;
+    private String updateavailableMessage;
+    private String updateurlMessage;
+    private String oldversionmaycauseproblemMessage;
+    private String nowusinglatestversionMessage;
+    private String reloadedMessage;
+    private String nopermissionMessage;
+    private String usageMessage;
+    private String CanNotConnectDatabaseMessage_include_reason;
+    private String PluginDisabledMessage;
+    private String InvalidUidMessage;
+    private String playerMessage;
+    private String uidfoudedMessage;
+    private String CanNotFoundPlayeridMessage;
+    private String playeridFoudedMessage;
+    private String CanNotFoundPlayerUIDMessage;
+    private String CanNotFoundPAPIMessage;
+
     @Override
     public void onEnable() {
         // bstats
