@@ -38,7 +38,9 @@ public class MeowUIDPlaceholderExpansion extends PlaceholderExpansion {
             return null;  // 如果玩家对象为null，则返回null
         }
 
+        string playerId = player.getName();
+
         // 获取玩家的 UID
-        return plugin.getPlayerUID(player.getUniqueId().toString());  // 返回
+        return plugin.getPlayerUID(playerId);  // 返回
     }
 }
