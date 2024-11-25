@@ -12,19 +12,25 @@
     <name>MeowUID</name>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>  <!-- 设置 Java 编译源版本为 8 -->
-        <maven.compiler.target>8</maven.compiler.target>  <!-- 设置 Java 编译目标版本为 8 -->
-        <spigot.version>1.20.1-R0.1-SNAPSHOT</spigot.version>  <!-- Spigot 版本 -->
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <spigot.version>1.20.1-R0.1-SNAPSHOT</spigot.version>  <!-- 使用 1.20.1 -->
     </properties>
 
     <repositories>
         <repository>
             <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/repository/public/</url>  <!-- Spigot 官方仓库 -->
+            <url>https://hub.spigotmc.org/nexus/repository/public/</url>
         </repository>
+        <!-- 添加 JitPack 仓库 -->
         <repository>
             <id>jitpack.io</id>
-            <url>https://jitpack.io</url>  <!-- JitPack 仓库 -->
+            <url>https://jitpack.io</url>
+        </repository>
+        <!-- 添加 PlaceholderAPI 仓库 -->
+        <repository>
+            <id>placeholderapi</id>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
     </repositories>
 
@@ -34,58 +40,49 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>${spigot.version}</version>
-            <scope>provided</scope>  <!-- 表示编译时依赖，但运行时由服务器提供 -->
+            <scope>provided</scope>
         </dependency>
-
-        <!-- Vault API 依赖，从 JitPack 获取 -->
-        <dependency>
-            <groupId>com.github.MilkBowl</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.7</version>
-            <scope>provided</scope>  <!-- 表示编译时依赖，但运行时由服务器提供 -->
-        </dependency>
-
         <!-- PlaceholderAPI 依赖 -->
         <dependency>
             <groupId>me.clip</groupId>
-            <artifactId>PlaceholderAPI</artifactId>
-            <version>2.11.3</version>  <!-- PlaceholderAPI 的版本，根据需要选择合适的版本 -->
-            <scope>provided</scope>  <!-- 表示编译时依赖，但运行时由服务器提供 -->
+            <artifactId>placeholderapi</artifactId>
+            <version>2.11.3</version> <!-- 确保使用合适的版本 -->
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- 编译插件，用于设置 Java 编译器的版本 -->
+            <!-- Maven 编译插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${maven.compiler.source}</source>  <!-- 设置源代码版本 -->
-                    <target>${maven.compiler.target}</target>  <!-- 设置目标版本 -->
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
 
-            <!-- 资源插件，用于确保 plugin.yml 和 config.yml 等文件被正确打包 -->
+            <!-- 资源文件插件，确保将 plugin.yml 和 config.yml 打包到 JAR 文件中 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.2.0</version>
                 <executions>
                     <execution>
-                        <phase>validate</phase>  <!-- 在验证阶段执行 -->
+                        <phase>validate</phase>
                         <goals>
-                            <goal>copy-resources</goal>  <!-- 复制资源文件 -->
+                            <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/classes</outputDirectory>  <!-- 复制到最终的 classes 目录 -->
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>src/main/resources</directory>  <!-- 资源文件路径 -->
+                                    <directory>src/main/resources</directory>
                                     <includes>
-                                        <include>**/*.yml</include>  <!-- 包括所有的 YML 文件 -->
-                                        <include>**/*.properties</include>  <!-- 包括所有的 properties 文件 -->
+                                        <include>**/*.yml</include>
+                                        <include>**/*.properties</include>
                                     </includes>
                                 </resource>
                             </resources>
@@ -94,7 +91,7 @@
                 </executions>
             </plugin>
 
-            <!-- JAR 插件，用于生成最终的 JAR 文件并设置主类 -->
+            <!-- Maven JAR 插件，用于打包插件并设置主类 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -102,8 +99,8 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <addClasspath>true</addClasspath>  <!-- 添加类路径 -->
-                            <mainClass>com.meow.meowjoincommand.MeowJoinCommand</mainClass>  <!-- 设置插件主类 -->
+                            <addClasspath>true</addClasspath>
+                            <mainClass>com.meow.meowjoincommand.MeowJoinCommand</mainClass>  <!-- 主类 -->
                         </manifest>
                     </archive>
                 </configuration>
