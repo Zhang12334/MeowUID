@@ -39,15 +39,11 @@ public class MeowUIDPlaceholderExpansion extends PlaceholderExpansion {
         }
 
         // 获取玩家的 UID
-        String playerUID = String.valueOf(plugin.getPlayerUID(player.getUniqueId().toString()));  // 使用公共方法
-        // 如果为数字则返回数值
-        if (isNumeric(playerUID) == true) {
+        String playerUID = plugin.getPlayerUID(player.getUniqueId().toString());  // 使用公共方法
+        if (playerUID != null) {
             return playerUID;  // 如果找到 UID，返回该 UID
         } else {
             return "Unknown UID";  // 否则返回 "Unknown UID"
         }
-    }
-    public static boolean isNumeric(String str) {
-        return str != null && str.chars().allMatch(Character::isDigit);
     }
 }
