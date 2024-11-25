@@ -35,7 +35,7 @@ public class MeowUIDPlaceholderExpansion extends PlaceholderExpansion {
         }
 
         // 获取玩家的 UID
-        String playerUID = plugin.FindUID(player.getUniqueId().toString());
+        String playerUID = String.valueOf(plugin.getPlayerUID(player.getUniqueId().toString())); // 使用公共方法
 
         if (playerUID == null) {
             return "Unknown UID";  // 如果没有找到 UID，返回 "Unknown UID"
