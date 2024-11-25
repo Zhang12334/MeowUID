@@ -33,7 +33,7 @@ public class MeowUIDPlaceholderExpansion extends PlaceholderExpansion {
 
     // 处理占位符请求
     @Override
-    public String onPlaceholderRequest(Player player, String params) {
+    public String onRequest(OfflinePlayer player, String params) {
         if (player == null) {
             return null;  // 如果玩家对象为null，则返回null
         }

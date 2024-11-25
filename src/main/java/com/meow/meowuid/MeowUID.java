@@ -78,7 +78,7 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
         connectDatabase();
 
         // 注册自定义占位符
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new MeowUIDPlaceholderExpansion(this).register();  // 注册占位符扩展
         } else {
             getLogger().warning(CanNotFoundPAPIMessage);
