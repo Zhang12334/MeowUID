@@ -104,9 +104,18 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
     }
 
     public String getPlayerUID(String playerId) {
+        // FindUID 方法返回 Long 类型的玩家 UID
         Long playeruid_tmp_l = FindUID(playerId);
-        String playeruid_tmp_s = Long.toString(playeruid_tmp_l);
-        return playeruid_tmp_s;  // 使用内部方法
+        
+        // 检查 playeruid_tmp_l 是否为 null
+        if (playeruid_tmp_l == null) {
+            return "Unknown UID";  // 如果没有找到 UID，返回 "Unknown UID"
+        }
+
+        // 将 Long 转换为 String
+        String playeruid_tmp_s = playeruid_tmp_l.toString();
+        
+        return playeruid_tmp_s;  // 返回字符串类型的 UID
     }
 
     // 加载配置文件
