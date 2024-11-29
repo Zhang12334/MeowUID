@@ -32,6 +32,7 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
     private boolean enablePlugin;
     private long startingUid;
     private static final String TABLE_NAME = "player_uid";
+    private final ConcurrentHashMap<String, Long> cache = new ConcurrentHashMap<>(); // 缓存
 
     private String startupMessage;
     private String shutdownMessage;
@@ -215,7 +216,7 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
     private void connectDatabase() {
         try {
             if (connection != null && !connection.isClosed()) return;
-            String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&useSSL=false";
+            String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true";
             connection = DriverManager.getConnection(url, username, password);
             
             // 创建表格如果不存在
@@ -249,30 +250,35 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
         Player player = event.getPlayer();
         String playerId = player.getName();
 
-        try {
-            PreparedStatement ps = connection.prepareStatement(
-                "SELECT uid FROM " + TABLE_NAME + " WHERE player_id = ?"
-            );
-            ps.setString(1, playerId);
-            ResultSet rs = ps.executeQuery();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    PreparedStatement ps = connection.prepareStatement(
+                        "SELECT uid FROM " + TABLE_NAME + " WHERE player_id = ?"
+                    );
+                    ps.setString(1, playerId);
+                    ResultSet rs = ps.executeQuery();
 
-            if (!rs.next()) {
-                // 为新玩家分配 UID
-                long newUid = getNextAvailableUid();
-                PreparedStatement insert = connection.prepareStatement(
-                    "INSERT INTO " + TABLE_NAME + " (player_id, uid) VALUES (?, ?)"
-                );
-                insert.setString(1, playerId);
-                insert.setLong(2, newUid);
-                insert.executeUpdate();
-                insert.close();
-                getLogger().info(RegistUIDMessage_a + " " + playerId + " " + RegistUIDMessage_b + newUid);
+                    if (!rs.next()) {
+                        // 为新玩家分配 UID
+                        long newUid = getNextAvailableUid();
+                        PreparedStatement insert = connection.prepareStatement(
+                            "INSERT INTO " + TABLE_NAME + " (player_id, uid) VALUES (?, ?)"
+                        );
+                        insert.setString(1, playerId);
+                        insert.setLong(2, newUid);
+                        insert.executeUpdate();
+                        insert.close();
+                        getLogger().info(RegistUIDMessage_a + " " + playerId + " " + RegistUIDMessage_b + newUid);
+                    }
+                    rs.close();
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
-            rs.close();
-            ps.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        }.runTaskTimerAsynchronously(this); //异步
     }
 
     // 获取下一个可用的 UID
@@ -323,6 +329,7 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
             } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
                 reloadConfig();
                 loadConfig();
+                cache.clear(); // 清空缓存
                 sender.sendMessage(reloadedMessage);
                 return true;
             }
@@ -340,18 +347,25 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
         }
     }
 
-    // 实际用于查找指定 playerId 的 UID 的函数, PAPI 也调用
-    private Long FindUID(String playerId) {
-        Long uid = null;  // 使用 Long 类型，允许返回 null
+    // 查找指定 playerId 的 UID
+    public Long findUID(String playerId) {
+        // 从缓存中获取
+        if (cache.containsKey(playerId)) {
+            return cache.get(playerId);
+        }
+
+        // 如果缓存没有，查询数据库
+        Long uid = null;
         try {
             PreparedStatement ps = connection.prepareStatement(
                 "SELECT uid FROM " + TABLE_NAME + " WHERE player_id = ?"
             );
             ps.setString(1, playerId);
             ResultSet rs = ps.executeQuery();
-            
+
             if (rs.next()) {
-                uid = rs.getLong("uid");  // 获取 UID
+                uid = rs.getLong("uid"); // 获取 UID
+                cache.put(playerId, uid); // 存入缓存
             }
 
             rs.close();
@@ -359,9 +373,9 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return uid;  // 如果没有找到，返回 null
-    }
 
+        return uid; // 如果没有找到，返回 null
+    }
 
     // 根据 UID 查找玩家名
     private void findIdByUid(CommandSender sender, long uid) {

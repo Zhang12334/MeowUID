@@ -1,6 +1,6 @@
 name: MeowUID
 main: com.meow.meowuid.MeowUID
-version: 1.0
+version: 1.1
 api-version: 1.16
 description: A plugin to assign unique UIDs to players and sync across multiple servers using MySQL.
 softdepend: [PlaceholderAPI]
@@ -9,7 +9,6 @@ commands:
   muid:
     description: Manage and query player UIDs.
     usage: /muid <find|reload>
-    aliases: [uid]
     permission: meowuid.admin
     permission-message: "§cYou do not have permission to use this command."
     

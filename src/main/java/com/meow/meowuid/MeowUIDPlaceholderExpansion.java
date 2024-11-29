@@ -36,6 +36,11 @@ public class MeowUIDPlaceholderExpansion extends PlaceholderExpansion {
     public String onPlaceholderRequest(Player player, String params) {
         String playerId = player.getName();
         // 获取玩家的 UID
-        return plugin.getPlayerUID(playerId);  // 返回
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                return plugin.getPlayerUID(playerId);  // 返回
+            }
+        }.runTaskAsynchronously(this);
     }
 }
