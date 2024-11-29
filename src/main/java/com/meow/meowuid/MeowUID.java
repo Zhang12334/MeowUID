@@ -349,7 +349,7 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
     }
 
     // 查找指定 playerId 的 UID
-    public Long findUID(String playerId) {
+    public Long FindUID(String playerId) {
         // 从缓存中获取
         if (cache.containsKey(playerId)) {
             return cache.get(playerId);
