@@ -279,7 +279,7 @@ public class MeowUID extends JavaPlugin implements Listener, CommandExecutor, Ta
                     e.printStackTrace();
                 }
             }
-        }.runTaskTimerAsynchronously(this); //异步
+        }.runTaskAsynchronously(this); //异步
     }
 
     // 获取下一个可用的 UID
