@@ -29,6 +29,7 @@
     </repositories>
 
     <dependencies>
+
         <!-- Spigot API 依赖 -->
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -36,17 +37,29 @@
             <version>${spigot.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <!-- PlaceholderAPI 依赖 -->
         <dependency>
-         <groupId>me.clip</groupId>
-          <artifactId>placeholderapi</artifactId>
-          <version>2.11.6</version>
-         <scope>provided</scope>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.11.6</version>
+            <scope>provided</scope>
         </dependency>
+
+        <!-- org.json 依赖 -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20231013</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
+
         <plugins>
+        
             <!-- Maven 编译插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -58,47 +71,19 @@
                 </configuration>
             </plugin>
 
-            <!-- 资源文件插件，确保将 plugin.yml 和 config.yml 打包到 JAR 文件中 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/resources</directory>
-                                    <includes>
-                                        <include>**/*.yml</include>
-                                        <include>**/*.properties</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Maven JAR 插件，用于打包插件并设置主类 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>com.meow.meowuid.MeowUID</mainClass>  <!-- 主类 -->
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
         </plugins>
+
+        <!-- 确保资源文件正确处理 -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>plugin.yml</include>
+                    <include>config.yml</include>
+                </includes>
+            </resource>
+        </resources>
+
     </build>
+
 </project>
