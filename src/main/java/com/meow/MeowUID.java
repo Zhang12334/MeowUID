@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -258,19 +259,38 @@ public class MeowUID extends JavaPlugin implements Listener {
         return false;
     }
 
-    // 提供 TAB 补全
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (!enablePlugin) return null; // 如果插件未启用，禁用补全
+@Override
+public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    if (!enablePlugin) return null; // 如果插件未启用，禁用补全
 
-        List<String> completions = new ArrayList<>();
-        if (args.length == 1) {
-            completions.add("find");
-            completions.add("reload");
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("find")) {
-            completions.add("id");
-            completions.add("uid");
+    List<String> completions = new ArrayList<>();
+    
+    // 第一层参数补全
+    if (args.length == 1) {
+        completions.add("find");
+        completions.add("reload");
+    } 
+
+    // 第二层参数补全
+    else if (args.length == 2 && args[0].equalsIgnoreCase("find")) {
+        completions.add("id");
+        completions.add("uid");
+    } 
+
+    // 第三层参数补全
+    else if (args.length == 3 && args[0].equalsIgnoreCase("find")) {
+        if (args[1].equalsIgnoreCase("id")) {
+            // 获取所有在线玩家的 ID
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                completions.add(player.getName().toString()); // 获取 id
+            }
         }
-        return completions;
     }
+    
+    // 返回补全结果
+    return completions.stream()
+            .filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase())) // 过滤以当前输入开头的选项
+            .collect(Collectors.toList());
+}
+
 }
