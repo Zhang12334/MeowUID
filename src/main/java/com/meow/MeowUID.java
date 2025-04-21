@@ -1,4 +1,4 @@
-package com.meow.meowuid;
+package com.meow;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

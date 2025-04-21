@@ -1,6 +1,6 @@
 name: MeowUID
-main: com.meow.meowuid.MeowUID
-version: 1.0.0
+main: com.meow.MeowUID
+version: 1.0.1
 api-version: 1.16
 description: A plugin to assign unique UIDs to players and sync across multiple servers using MySQL.
 depend:
