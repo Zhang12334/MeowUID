@@ -1,4 +1,4 @@
-package com.meow;
+package com.meowuid;
 
 import java.net.HttpURLConnection;
 import java.net.URI;

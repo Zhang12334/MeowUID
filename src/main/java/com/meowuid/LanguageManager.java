@@ -1,4 +1,4 @@
-package com.meow;
+package com.meowuid;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -47,7 +47,7 @@ public class LanguageManager {
             messages.put("reloaded", "配置文件已重载!");
             messages.put("nopermission", "你没有权限执行此命令!");
             messages.put("usage", "用法:");
-            messages.put("CanNotConnectDatabase", "无法连接到数据库:");
+            messages.put("CanNotConnectDatabase", "无法连接到数据库: %s");
             messages.put("PluginDisabled", "插件目前未启用, 请检查你的配置文件!");
             messages.put("InvalidUid", "无效的 UID 格式!");
             messages.put("FoudedUIDforPlayer", "玩家 %s 的 UID 是 %d");
@@ -75,7 +75,7 @@ public class LanguageManager {
             messages.put("reloaded", "配置文件已重载!");
             messages.put("nopermission", "你没有权限执行此命令!");
             messages.put("usage", "用法:");
-            messages.put("CanNotConnectDatabase", "無法連接到數據庫:");
+            messages.put("CanNotConnectDatabase", "無法連接到數據庫: %s");
             messages.put("PluginDisabled", "插件目前未啟用，請檢查你的配置文件!");
             messages.put("InvalidUid", "無效的 UID 格式!");
             messages.put("FoudedUIDforPlayer", "玩家 %s 的 UID 是 %d");
@@ -103,7 +103,7 @@ public class LanguageManager {
             messages.put("reloaded", "Config file has been reloaded!");
             messages.put("nopermission", "You do not have permission to execute this command!");
             messages.put("usage", "Usage:");
-            messages.put("CanNotConnectDatabase", "Failed to connect to the database:");
+            messages.put("CanNotConnectDatabase", "Failed to connect to the database: %s");
             messages.put("PluginDisabled", "The plugin is currently disabled, please check your configuration file!");
             messages.put("InvalidUid", "Invalid UID format!");
             messages.put("FoudedUIDforPlayer", "Player %s has been registered with UID %d");
@@ -131,7 +131,7 @@ public class LanguageManager {
             messages.put("reloaded", "設定ファイルがリロードされました!");
             messages.put("nopermission", "このコマンドの実行に権限がありません!");
             messages.put("usage", "使用法:");
-            messages.put("CanNotConnectDatabase", "データベースに接続できません:");
+            messages.put("CanNotConnectDatabase", "データベースに接続できません: %s");
             messages.put("PluginDisabled", "プラグインは現在無効化されています。設定ファイルを確認してください!");
             messages.put("InvalidUid", "無効なUIDフォーマットです!");
             messages.put("FoudedUIDforPlayer", "プレイヤー%sはUID%dで登録されています");

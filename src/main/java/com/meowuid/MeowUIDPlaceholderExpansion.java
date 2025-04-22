@@ -1,4 +1,4 @@
-package com.meow;
+package com.meowuid;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;

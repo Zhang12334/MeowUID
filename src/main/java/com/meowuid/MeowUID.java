@@ -1,4 +1,4 @@
-package com.meow;
+package com.meowuid;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -137,7 +137,8 @@ public class MeowUID extends JavaPlugin implements Listener {
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            getLogger().severe(languageManager.getMessage("CanNotConnectDatabase") + " " + e.getMessage());
+            String errorMessage = e.getMessage() != null ? e.getMessage() : "Unknown Error";
+            getLogger().severe(String.format(languageManager.getMessage("CanNotConnectDatabase"), errorMessage));
         }
     }
 
@@ -164,35 +165,37 @@ public class MeowUID extends JavaPlugin implements Listener {
         String playerUUID = player.getUniqueId().toString();
         String playerId = player.getName();
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                try {
-                    PreparedStatement ps = connection.prepareStatement(
-                        "SELECT uid FROM " + TABLE_NAME + " WHERE uuid = ?"
-                    );
-                    ps.setString(1, playerUUID);
-                    ResultSet rs = ps.executeQuery();
-
-                    if (!rs.next()) {
-                        // 为新玩家分配 UID
-                        long newUid = getNextAvailableUid();
-                        PreparedStatement insert = connection.prepareStatement(
-                            "INSERT INTO " + TABLE_NAME + " (uuid, uid) VALUES (?, ?)"
+        if (connection != null) { // 防爆(?)
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    try {
+                        PreparedStatement ps = connection.prepareStatement(
+                            "SELECT uid FROM " + TABLE_NAME + " WHERE uuid = ?"
                         );
-                        insert.setString(1, playerUUID);
-                        insert.setLong(2, newUid);
-                        insert.executeUpdate();
-                        insert.close();
-                        getLogger().info(String.format(languageManager.getMessage("RegistUID"), playerId, newUid));
+                        ps.setString(1, playerUUID);
+                        ResultSet rs = ps.executeQuery();
+    
+                        if (!rs.next()) {
+                            // 为新玩家分配 UID
+                            long newUid = getNextAvailableUid();
+                            PreparedStatement insert = connection.prepareStatement(
+                                "INSERT INTO " + TABLE_NAME + " (uuid, uid) VALUES (?, ?)"
+                            );
+                            insert.setString(1, playerUUID);
+                            insert.setLong(2, newUid);
+                            insert.executeUpdate();
+                            insert.close();
+                            getLogger().info(String.format(languageManager.getMessage("RegistUID"), playerId, newUid));
+                        }
+                        rs.close();
+                        ps.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
                     }
-                    rs.close();
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
-            }
-        }.runTaskAsynchronously(this); //异步
+            }.runTaskAsynchronously(this); //异步
+        }
     }
 
     // 获取下一个可用的 UID

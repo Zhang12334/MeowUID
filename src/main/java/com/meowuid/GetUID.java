@@ -1,4 +1,4 @@
-package com.meow;
+package com.meowuid;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -211,6 +211,11 @@ public class GetUID {
             return cache.get(playerUuid);
         }
 
+        // 检查数据库连接
+        if (connection == null) {
+            return null;
+        }
+
         // 如果缓存没有，查询数据库
         Long uid = null;
         try {
@@ -229,6 +234,7 @@ public class GetUID {
             ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            return uid;
         }
 
         return uid; // 如果没有找到，返回null
