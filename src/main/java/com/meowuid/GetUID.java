@@ -71,6 +71,50 @@ public class GetUID {
         }.runTaskAsynchronously(plugin);
     }
 
+    // 异步查找 UID
+    public void findUidByUUID(CommandSender sender, String playerUUID) {
+        sender.sendMessage(languageManager.getMessage("finding"));
+        long startTime = System.currentTimeMillis(); // 记录开始时间
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                // 将字符串转换为 UUID
+                UUID uuid;
+                try {
+                    uuid = UUID.fromString(playerUUID);
+                } catch (IllegalArgumentException e) {
+                    // 如果 UUID 格式无效，发送错误消息
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            sender.sendMessage(String.format(languageManager.getMessage("InvalidUUIDFormat"), playerUUID));
+                        }
+                    }.runTask(plugin);
+                    return;
+                }       
+
+                Long uid = FindUID(uuid);
+                String baseMessage = uid != null
+                    ? String.format(languageManager.getMessage("FoudedUIDforUUID"), playerUUID, uid)
+                    : String.format(languageManager.getMessage("CanNotFoundPlayerUidByUUID"), playerUUID);
+                
+                // 计算耗时并构造最终消息
+                long queryTime = System.currentTimeMillis() - startTime;
+                final String message = showQueryTime
+                    ? baseMessage + " " + String.format(languageManager.getMessage("query_time"), queryTime)
+                    : baseMessage;
+
+                // 在主线程发送消息
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        sender.sendMessage(message);
+                    }
+                }.runTask(plugin);
+            }
+        }.runTaskAsynchronously(plugin);
+    }
+
     // 异步查找玩家名
     public void findIdByUid(CommandSender sender, long uid) {
         sender.sendMessage(languageManager.getMessage("finding"));

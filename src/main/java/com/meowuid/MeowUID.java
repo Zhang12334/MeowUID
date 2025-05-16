@@ -241,8 +241,11 @@ public class MeowUID extends JavaPlugin implements Listener {
                     } catch (NumberFormatException e) {
                         sender.sendMessage(languageManager.getMessage("InvalidUid"));
                     }
+                } else if (args[1].equalsIgnoreCase("uuid") && args.length == 3) {
+                    String playerUUID = args[2];
+                    commandGetUID.findUidByUUID(sender, playerUUID);
                 } else {
-                    sender.sendMessage(languageManager.getMessage("usage") + " /uid find <id/uid> <PlayerID / PlayerUID>");
+                    sender.sendMessage(languageManager.getMessage("usage") + " /uid find <id/uid/uuid> <PlayerID / PlayerUID / PlayerUUID>");
                 }
                 return true;
             } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
@@ -262,38 +265,39 @@ public class MeowUID extends JavaPlugin implements Listener {
         return false;
     }
 
-@Override
-public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-    if (!enablePlugin) return null; // 如果插件未启用，禁用补全
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (!enablePlugin) return null; // 如果插件未启用，禁用补全
 
-    List<String> completions = new ArrayList<>();
-    
-    // 第一层参数补全
-    if (args.length == 1) {
-        completions.add("find");
-        completions.add("reload");
-    } 
+        List<String> completions = new ArrayList<>();
+        
+        // 第一层参数补全
+        if (args.length == 1) {
+            completions.add("find");
+            completions.add("reload");
+        } 
 
-    // 第二层参数补全
-    else if (args.length == 2 && args[0].equalsIgnoreCase("find")) {
-        completions.add("id");
-        completions.add("uid");
-    } 
+        // 第二层参数补全
+        else if (args.length == 2 && args[0].equalsIgnoreCase("find")) {
+            completions.add("id");
+            completions.add("uid");
+            completions.add("uuid");
+        } 
 
-    // 第三层参数补全
-    else if (args.length == 3 && args[0].equalsIgnoreCase("find")) {
-        if (args[1].equalsIgnoreCase("id")) {
-            // 获取所有在线玩家的 ID
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                completions.add(player.getName().toString()); // 获取 id
+        // 第三层参数补全
+        else if (args.length == 3 && args[0].equalsIgnoreCase("find")) {
+            if (args[1].equalsIgnoreCase("id")) {
+                // 获取所有在线玩家的 ID
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    completions.add(player.getName().toString()); // 获取 id
+                }
             }
         }
+        
+        // 返回补全结果
+        return completions.stream()
+                .filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase())) // 过滤以当前输入开头的选项
+                .collect(Collectors.toList());
     }
-    
-    // 返回补全结果
-    return completions.stream()
-            .filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase())) // 过滤以当前输入开头的选项
-            .collect(Collectors.toList());
-}
 
 }

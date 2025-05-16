@@ -58,6 +58,9 @@ public class LanguageManager {
             messages.put("RegistUID", "已为玩家 %s 注册UID %d");
             messages.put("finding", "正在查询...");
             messages.put("query_time", "(耗时: %dms)");
+            messages.put("InvalidUUIDFormat", "无效的 UUID 格式: %s");
+            messages.put("FoudedUIDforUUID", "UUID 为 %s 的玩家的 UID 是 %d");
+            messages.put("CanNotFoundPlayerUidByUUID", "找不到此 UUID 的玩家对应的 UID: %s");
         } else if ("zh_hant".equalsIgnoreCase(language)) {
             // 繁体中文消息
             messages.put("TranslationContributors", "當前语言: 繁體中文 (貢獻者: Zhang1233 & TongYi-Lingma LLM)");
@@ -86,6 +89,9 @@ public class LanguageManager {
             messages.put("RegistUID", "已為玩家 %s 註冊UID %d");
             messages.put("finding", "正在查询...");
             messages.put("query_time", "(耗時: %dms)");
+            messages.put("InvalidUUIDFormat", "無效的 UUID 格式: %s");
+            messages.put("FoudedUIDforUUID", "UUID 為 %s 的玩家的 UID 是 %d");
+            messages.put("CanNotFoundPlayerUidByUUID", "找不到此 UUID 的玩家對應的 UID: %s");
         } else if ("en_us".equalsIgnoreCase(language)) {
             // English messages
             messages.put("TranslationContributors", "Current language: English (Contributors: Zhang1233)");
@@ -114,6 +120,9 @@ public class LanguageManager {
             messages.put("RegistUID", "Registered UID %d for player %s");
             messages.put("finding", "Finding...");
             messages.put("query_time", "(Time taken: %dms)");
+            messages.put("InvalidUUIDFormat", "Invalid UUID format: %s");
+            messages.put("FoudedUIDforUUID", "The UID of the player with UUID %s is %d");
+            messages.put("CanNotFoundPlayerUidByUUID", "Unable to find a UID for the player with this UUID: %s");
         } else if ("ja_jp".equalsIgnoreCase(language)) {
             // 日本語メッセージ
             messages.put("TranslationContributors", "現在の言語: 日本語 (貢献者: Zhang1233 & TongYi-Lingma LLM)");
@@ -142,6 +151,9 @@ public class LanguageManager {
             messages.put("RegistUID", "プレイヤー%sにUID%dを登録しました");
             messages.put("finding", "検索中...");
             messages.put("query_time", "(処理時間: %dms)");
+            messages.put("InvalidUUIDFormat", "無効なUUIDフォーマット: %s");
+            messages.put("FoudedUIDforUUID", "UUID%sのプレイヤーのUIDは%dです");
+            messages.put("CanNotFoundPlayerUidByUUID", "このUUIDのプレイヤーのUIDが見つかりません: %s");
         }
     }
 
