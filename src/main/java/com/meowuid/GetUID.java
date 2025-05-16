@@ -52,7 +52,7 @@ public class GetUID {
                 Long uid = getPlayerUIDfromID(playerId);
                 String baseMessage = uid != null
                     ? String.format(languageManager.getMessage("FoudedUIDforPlayer"), playerId, uid)
-                    : languageManager.getMessage("CanNotFoundPlayerUidById") + " " + playerId;
+                    : String.format(languageManager.getMessage("CanNotFoundPlayerUidById"), playerId);
                 
                 // 计算耗时并构造最终消息
                 long queryTime = System.currentTimeMillis() - startTime;
@@ -140,7 +140,7 @@ public class GetUID {
                 String baseMessage = dbError ? languageManager.getMessage("DatabaseError")
                     : playerId != null
                         ? "UID " + uid + " " + languageManager.getMessage("playeridFouded") + " " + playerId
-                        : languageManager.getMessage("CanNotFoundPlayerIdByUID") + " " + uid;
+                        : String.format(languageManager.getMessage("CanNotFoundPlayerIdByUID"), uid);
 
                 long queryTime = System.currentTimeMillis() - startTime;
                 final String message = showQueryTime
