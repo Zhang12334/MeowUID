@@ -10,7 +10,7 @@ softdepend: [PlaceholderAPI]
 commands:
   uid:
     description: Manage and query player UIDs.
-    usage: /uid <find|reload>
+    usage: /uid <FindUIDFrom|FindIDFrom|reload>
     permission: meowuid.admin
     permission-message: "§cYou do not have permission to use this command."
     

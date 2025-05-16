@@ -230,22 +230,27 @@ public class MeowUID extends JavaPlugin implements Listener {
 
         if (command.getName().equalsIgnoreCase("uid")) {
             GetUID commandGetUID = new GetUID(this, sender, languageManager, connection);
-            if (args.length >= 2 && args[0].equalsIgnoreCase("find")) {
-                if (args[1].equalsIgnoreCase("id") && args.length == 3) {
+            if (args.length >= 2 && args[0].equalsIgnoreCase("FindUIDFrom")) {
+                if (args[1].equalsIgnoreCase("PlayerID") && args.length == 3) {
                     String playerId = args[2];
                     commandGetUID.findUidById(sender, playerId);
-                } else if (args[1].equalsIgnoreCase("uid") && args.length == 3) {
+                } else if (args[1].equalsIgnoreCase("PlayerUUID") && args.length == 3) {
+                    String playerUUID = args[2];
+                    commandGetUID.findUidByUUID(sender, playerUUID);
+                } else {
+                    sender.sendMessage(languageManager.getMessage("usage") + " /uid FindUIDFrom <PlayerID/PlayerUUID> <id/uuid>");
+                }
+                return true;
+            } else if (args.length >= 2 && args[0].equalsIgnoreCase("FindIDFrom")) {
+                if (args[1].equalsIgnoreCase("PlayerUID") && args.length == 3) {
                     try {
                         long uid = Long.parseLong(args[2]);
                         commandGetUID.findIdByUid(sender, uid);
                     } catch (NumberFormatException e) {
                         sender.sendMessage(languageManager.getMessage("InvalidUid"));
                     }
-                } else if (args[1].equalsIgnoreCase("uuid") && args.length == 3) {
-                    String playerUUID = args[2];
-                    commandGetUID.findUidByUUID(sender, playerUUID);
                 } else {
-                    sender.sendMessage(languageManager.getMessage("usage") + " /uid find <id/uid/uuid> <PlayerID / PlayerUID / PlayerUUID>");
+                    sender.sendMessage(languageManager.getMessage("usage") + " /uid FindIDFrom PlayerUID <uid>");
                 }
                 return true;
             } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
@@ -273,19 +278,24 @@ public class MeowUID extends JavaPlugin implements Listener {
         
         // 第一层参数补全
         if (args.length == 1) {
-            completions.add("find");
+            completions.add("FindUIDFrom");
+            completions.add("FindIDFrom");
             completions.add("reload");
         } 
 
         // 第二层参数补全
-        else if (args.length == 2 && args[0].equalsIgnoreCase("find")) {
-            completions.add("id");
-            completions.add("uid");
-            completions.add("uuid");
+        else if (args.length == 2 && args[0].equalsIgnoreCase("FindUIDFrom")) {
+            completions.add("PlayerID");
+            completions.add("PlayerUUID");
+        } 
+
+        // 第二层参数补全
+        else if (args.length == 2 && args[0].equalsIgnoreCase("FindIDFrom")) {
+            completions.add("PlayerUID");
         } 
 
         // 第三层参数补全
-        else if (args.length == 3 && args[0].equalsIgnoreCase("find")) {
+        else if (args.length == 3 && args[0].equalsIgnoreCase("FindUIDFrom")) {
             if (args[1].equalsIgnoreCase("id")) {
                 // 获取所有在线玩家的 ID
                 for (Player player : Bukkit.getOnlinePlayers()) {
