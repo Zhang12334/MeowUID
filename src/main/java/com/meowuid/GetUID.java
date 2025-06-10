@@ -123,14 +123,16 @@ public class GetUID {
             @Override
             public void run() {
                 String playerId = null;
+                String qq = null;
                 boolean dbError = false;
                 try (PreparedStatement ps = connection.prepareStatement(
-                    "SELECT uuid FROM " + TABLE_NAME + " WHERE uid = ?")) {
+                    "SELECT uuid, qq FROM " + TABLE_NAME + " WHERE uid = ?")) {
                     ps.setLong(1, uid);
                     try (ResultSet rs = ps.executeQuery()) {
                         if (rs.next()) {
                             String uuid = rs.getString("uuid");
                             playerId = getPlayerIdFromUUID(uuid);
+                            qq = rs.getString("qq");
                         }
                     }
                 } catch (SQLException e) {
@@ -140,7 +142,97 @@ public class GetUID {
                 String baseMessage = dbError ? languageManager.getMessage("DatabaseError")
                     : playerId != null
                         ? "UID " + uid + " " + languageManager.getMessage("playeridFouded") + " " + playerId
+                        + (qq != null && !qq.isEmpty() ? " (QQ: " + qq + ")" : "")
                         : String.format(languageManager.getMessage("CanNotFoundPlayerIdByUID"), uid);
+
+                long queryTime = System.currentTimeMillis() - startTime;
+                final String message = showQueryTime
+                    ? baseMessage + " " + String.format(languageManager.getMessage("query_time"), queryTime)
+                    : baseMessage;
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        sender.sendMessage(message);
+                    }
+                }.runTask(plugin);
+            }
+        }.runTaskAsynchronously(plugin);
+    }
+
+    // 查询指定玩家的QQ
+    public void findQQByUid(CommandSender sender, long uid) {
+        sender.sendMessage(languageManager.getMessage("finding"));
+        long startTime = System.currentTimeMillis();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String qq = null;
+                boolean dbError = false;
+                try (PreparedStatement ps = connection.prepareStatement(
+                    "SELECT qq FROM " + TABLE_NAME + " WHERE uid = ?")) {
+                    ps.setLong(1, uid);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            qq = rs.getString("qq");
+                        }
+                    }
+                } catch (SQLException e) {
+                    dbError = true;
+                }
+
+                String baseMessage = dbError ? languageManager.getMessage("DatabaseError")
+                    : qq != null && !qq.isEmpty()
+                        ? String.format(languageManager.getMessage("QQFound"), uid, qq)
+                        : String.format(languageManager.getMessage("QQNotFound"), uid);
+
+                long queryTime = System.currentTimeMillis() - startTime;
+                final String message = showQueryTime
+                    ? baseMessage + " " + String.format(languageManager.getMessage("query_time"), queryTime)
+                    : baseMessage;
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        sender.sendMessage(message);
+                    }
+                }.runTask(plugin);
+            }
+        }.runTaskAsynchronously(plugin);
+    }
+
+    // 通过玩家ID查询QQ
+    public void findQQById(CommandSender sender, String playerId) {
+        sender.sendMessage(languageManager.getMessage("finding"));
+        long startTime = System.currentTimeMillis();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String qq = null;
+                boolean dbError = false;
+                try {
+                    // 先通过玩家ID获取UUID
+                    String uuid = getUUIDFromPlayerId(playerId);
+                    if (uuid != null) {
+                        // 再通过UUID查询QQ
+                        try (PreparedStatement ps = connection.prepareStatement(
+                            "SELECT qq FROM " + TABLE_NAME + " WHERE uuid = ?")) {
+                            ps.setString(1, uuid);
+                            try (ResultSet rs = ps.executeQuery()) {
+                                if (rs.next()) {
+                                    qq = rs.getString("qq");
+                                }
+                            }
+                        }
+                    }
+                } catch (SQLException e) {
+                    dbError = true;
+                }
+
+                String baseMessage = dbError ? languageManager.getMessage("DatabaseError")
+                    : qq != null && !qq.isEmpty()
+                        ? String.format(languageManager.getMessage("QQFoundForPlayer"), playerId, qq)
+                        : String.format(languageManager.getMessage("QQNotFoundForPlayer"), playerId);
 
                 long queryTime = System.currentTimeMillis() - startTime;
                 final String message = showQueryTime
@@ -246,6 +338,30 @@ public class GetUID {
             e.printStackTrace();
             return null; // 发生错误时返回 null
         }
+    }
+
+    // 通过玩家ID获取UUID
+    private String getUUIDFromPlayerId(String playerId) {
+        // 先检查在线玩家
+        Player player = Bukkit.getPlayer(playerId);
+        if (player != null) {
+            return player.getUniqueId().toString();
+        }
+
+        // 如果不在线，尝试从数据库查询
+        try (PreparedStatement ps = connection.prepareStatement(
+            "SELECT uuid FROM " + TABLE_NAME + " WHERE uuid IN (SELECT uuid FROM " + TABLE_NAME + " WHERE uid IN (SELECT uid FROM " + TABLE_NAME + " WHERE uuid = ?))"
+        )) {
+            ps.setString(1, playerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("uuid");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // 查找指定 UUID 的 UID

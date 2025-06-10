@@ -132,9 +132,25 @@ public class MeowUID extends JavaPlugin implements Listener {
             try (PreparedStatement ps = connection.prepareStatement(
                 "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
                     "uuid VARCHAR(36) PRIMARY KEY, " +
-                    "uid BIGINT NOT NULL)"
+                    "uid BIGINT NOT NULL, " +
+                    "qq VARCHAR(20) DEFAULT NULL)"
             )) {
                 ps.executeUpdate();
+            }
+
+            // 检查是否需要升级数据库
+            try (PreparedStatement ps = connection.prepareStatement(
+                "SHOW COLUMNS FROM " + TABLE_NAME + " LIKE 'qq'"
+            )) {
+                ResultSet rs = ps.executeQuery();
+                if (!rs.next()) {
+                    // 如果qq列不存在，添加它
+                    try (PreparedStatement alterPs = connection.prepareStatement(
+                        "ALTER TABLE " + TABLE_NAME + " ADD COLUMN qq VARCHAR(20) DEFAULT NULL"
+                    )) {
+                        alterPs.executeUpdate();
+                    }
+                }
             }
         } catch (SQLException e) {
             String errorMessage = e.getMessage() != null ? e.getMessage() : "Unknown Error";
@@ -228,86 +244,73 @@ public class MeowUID extends JavaPlugin implements Listener {
             return true;
         }
 
-        if (command.getName().equalsIgnoreCase("uid")) {
-            GetUID commandGetUID = new GetUID(this, sender, languageManager, connection);
-            if (args.length >= 2 && args[0].equalsIgnoreCase("FindUIDFrom")) {
-                if (args[1].equalsIgnoreCase("PlayerID") && args.length == 3) {
-                    String playerId = args[2];
-                    commandGetUID.findUidById(sender, playerId);
-                } else if (args[1].equalsIgnoreCase("PlayerUUID") && args.length == 3) {
-                    String playerUUID = args[2];
-                    commandGetUID.findUidByUUID(sender, playerUUID);
-                } else {
-                    sender.sendMessage(languageManager.getMessage("usage") + " /uid FindUIDFrom <PlayerID/PlayerUUID> <id/uuid>");
+        if (args.length == 0) {
+            sender.sendMessage(languageManager.getMessage("usage") + " /uid <FindUIDFrom|FindIDFrom|FindQQFrom|reload>");
+            return true;
+        }
+
+        GetUID commandGetUID = new GetUID(this, sender, languageManager, connection);
+
+        if (args.length >= 2 && args[0].equalsIgnoreCase("FindUIDFrom")) {
+            if (args[1].equalsIgnoreCase("PlayerUID") && args.length == 3) {
+                try {
+                    long uid = Long.parseLong(args[2]);
+                    commandGetUID.findIdByUid(sender, uid);
+                } catch (NumberFormatException e) {
+                    sender.sendMessage(languageManager.getMessage("InvalidUid"));
                 }
-                return true;
-            } else if (args.length >= 2 && args[0].equalsIgnoreCase("FindIDFrom")) {
-                if (args[1].equalsIgnoreCase("PlayerUID") && args.length == 3) {
-                    try {
-                        long uid = Long.parseLong(args[2]);
-                        commandGetUID.findIdByUid(sender, uid);
-                    } catch (NumberFormatException e) {
-                        sender.sendMessage(languageManager.getMessage("InvalidUid"));
-                    }
-                } else {
-                    sender.sendMessage(languageManager.getMessage("usage") + " /uid FindIDFrom PlayerUID <uid>");
-                }
-                return true;
-            } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
-                reloadConfig();
-                loadConfig();
-                // 清空缓存
-                cache.clear();
-                // 重新初始化 LanguageManager
-                languageManager = new LanguageManager(getConfig());
-                // 重新连接数据库并初始化 GetUID
-                disconnectDatabase();
-                connectDatabase();
-                sender.sendMessage(languageManager.getMessage("reloaded"));
-                return true;
+            } else {
+                sender.sendMessage(languageManager.getMessage("usage") + " /uid FindIDFrom PlayerUID <uid>");
             }
+            return true;
+        } else if (args.length >= 2 && args[0].equalsIgnoreCase("FindQQFrom")) {
+            if (args[1].equalsIgnoreCase("PlayerUID") && args.length == 3) {
+                try {
+                    long uid = Long.parseLong(args[2]);
+                    commandGetUID.findQQByUid(sender, uid);
+                } catch (NumberFormatException e) {
+                    sender.sendMessage(languageManager.getMessage("InvalidUid"));
+                }
+            } else if (args[1].equalsIgnoreCase("PlayerID") && args.length == 3) {
+                String playerId = args[2];
+                commandGetUID.findQQById(sender, playerId);
+            } else {
+                sender.sendMessage(languageManager.getMessage("usage") + " /uid FindQQFrom <PlayerUID/PlayerID> <uid/playerid>");
+            }
+            return true;
+        } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+            reloadConfig();
+            loadConfig();
+            // 清空缓存
+            cache.clear();
+            // 重新初始化 LanguageManager
+            languageManager = new LanguageManager(getConfig());
+            // 重新连接数据库并初始化 GetUID
+            disconnectDatabase();
+            connectDatabase();
+            sender.sendMessage(languageManager.getMessage("reloaded"));
+            return true;
         }
         return false;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (!enablePlugin) return null; // 如果插件未启用，禁用补全
-
         List<String> completions = new ArrayList<>();
-        
-        // 第一层参数补全
         if (args.length == 1) {
             completions.add("FindUIDFrom");
             completions.add("FindIDFrom");
+            completions.add("FindQQFrom");
             completions.add("reload");
-        } 
-
-        // 第二层参数补全
-        else if (args.length == 2 && args[0].equalsIgnoreCase("FindUIDFrom")) {
-            completions.add("PlayerID");
-            completions.add("PlayerUUID");
-        } 
-
-        // 第二层参数补全
-        else if (args.length == 2 && args[0].equalsIgnoreCase("FindIDFrom")) {
-            completions.add("PlayerUID");
-        } 
-
-        // 第三层参数补全
-        else if (args.length == 3 && args[0].equalsIgnoreCase("FindUIDFrom")) {
-            if (args[1].equalsIgnoreCase("id")) {
-                // 获取所有在线玩家的 ID
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    completions.add(player.getName().toString()); // 获取 id
-                }
+        } else if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("FindUIDFrom") || args[0].equalsIgnoreCase("FindIDFrom") || args[0].equalsIgnoreCase("FindQQFrom")) {
+                completions.add("PlayerUID");
+                completions.add("PlayerID");
             }
         }
-        
-        // 返回补全结果
         return completions.stream()
-                .filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase())) // 过滤以当前输入开头的选项
-                .collect(Collectors.toList());
+            .filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
+            .collect(Collectors.toList());
     }
 
 }

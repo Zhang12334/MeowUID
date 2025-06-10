@@ -61,6 +61,11 @@ public class LanguageManager {
             messages.put("InvalidUUIDFormat", "无效的 UUID 格式: %s");
             messages.put("FoudedUIDforUUID", "UUID 为 %s 的玩家的 UID 是 %d");
             messages.put("CanNotFoundPlayerUidByUUID", "找不到此 UUID 的玩家对应的 UID: %s");
+            messages.put("DatabaseError", "数据库错误！");
+            messages.put("QQNotFound", "找不到UID为 %d 的玩家的QQ信息");
+            messages.put("QQFound", "UID为 %d 的玩家的QQ是：%s");
+            messages.put("QQNotFoundForPlayer", "找不到玩家 %s 的QQ信息");
+            messages.put("QQFoundForPlayer", "玩家 %s 的QQ是：%s");
         } else if ("zh_hant".equalsIgnoreCase(language)) {
             // 繁体中文消息
             messages.put("TranslationContributors", "當前语言: 繁體中文 (貢獻者: Zhang1233 & TongYi-Lingma LLM)");
@@ -92,6 +97,11 @@ public class LanguageManager {
             messages.put("InvalidUUIDFormat", "無效的 UUID 格式: %s");
             messages.put("FoudedUIDforUUID", "UUID 為 %s 的玩家的 UID 是 %d");
             messages.put("CanNotFoundPlayerUidByUUID", "找不到此 UUID 的玩家對應的 UID: %s");
+            messages.put("DatabaseError", "數據庫錯誤！");
+            messages.put("QQNotFound", "找不到UID為 %d 的玩家的QQ信息");
+            messages.put("QQFound", "UID為 %d 的玩家的QQ是：%s");
+            messages.put("QQNotFoundForPlayer", "找不到玩家 %s 的QQ信息");
+            messages.put("QQFoundForPlayer", "玩家 %s 的QQ是：%s");
         } else if ("en_us".equalsIgnoreCase(language)) {
             // English messages
             messages.put("TranslationContributors", "Current language: English (Contributors: Zhang1233)");
@@ -123,6 +133,11 @@ public class LanguageManager {
             messages.put("InvalidUUIDFormat", "Invalid UUID format: %s");
             messages.put("FoudedUIDforUUID", "The UID of the player with UUID %s is %d");
             messages.put("CanNotFoundPlayerUidByUUID", "Unable to find a UID for the player with this UUID: %s");
+            messages.put("DatabaseError", "Database error occurred!");
+            messages.put("QQNotFound", "Unable to find QQ for player with UID %d");
+            messages.put("QQFound", "QQ for player with UID %d is: %s");
+            messages.put("QQNotFoundForPlayer", "Unable to find QQ for player %s");
+            messages.put("QQFoundForPlayer", "QQ for player %s is: %s");
         } else if ("ja_jp".equalsIgnoreCase(language)) {
             // 日本語メッセージ
             messages.put("TranslationContributors", "現在の言語: 日本語 (貢献者: Zhang1233 & TongYi-Lingma LLM)");
@@ -154,6 +169,11 @@ public class LanguageManager {
             messages.put("InvalidUUIDFormat", "無効なUUIDフォーマット: %s");
             messages.put("FoudedUIDforUUID", "UUID%sのプレイヤーのUIDは%dです");
             messages.put("CanNotFoundPlayerUidByUUID", "このUUIDのプレイヤーのUIDが見つかりません: %s");
+            messages.put("DatabaseError", "データベースエラーが発生しました！");
+            messages.put("QQNotFound", "UID %d のプレイヤーのQQ情報が見つかりません");
+            messages.put("QQFound", "UID %d のプレイヤーのQQは：%s です");
+            messages.put("QQNotFoundForPlayer", "プレイヤー %s のQQ情報が見つかりません");
+            messages.put("QQFoundForPlayer", "プレイヤー %s のQQは：%s です");
         }
     }
 
