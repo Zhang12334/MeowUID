@@ -66,6 +66,10 @@ public class LanguageManager {
             messages.put("QQFound", "UID为 %d 的玩家的QQ是：%s");
             messages.put("QQNotFoundForPlayer", "找不到玩家 %s 的QQ信息");
             messages.put("QQFoundForPlayer", "玩家 %s 的QQ是：%s");
+            messages.put("QQNotFoundForUUID", "找不到UUID为 %s 的玩家的QQ信息");
+            messages.put("QQFoundForUUID", "UUID为 %s 的玩家的QQ是：%s");
+            messages.put("CanNotFoundPlayerIdByUUID", "找不到UUID为 %s 的玩家ID");
+            messages.put("FoundIDForUUID", "UUID为 %s 的玩家ID是：%s");
         } else if ("zh_hant".equalsIgnoreCase(language)) {
             // 繁体中文消息
             messages.put("TranslationContributors", "當前语言: 繁體中文 (貢獻者: Zhang1233 & TongYi-Lingma LLM)");
@@ -102,6 +106,10 @@ public class LanguageManager {
             messages.put("QQFound", "UID為 %d 的玩家的QQ是：%s");
             messages.put("QQNotFoundForPlayer", "找不到玩家 %s 的QQ信息");
             messages.put("QQFoundForPlayer", "玩家 %s 的QQ是：%s");
+            messages.put("QQNotFoundForUUID", "找不到UUID為 %s 的玩家的QQ信息");
+            messages.put("QQFoundForUUID", "UUID為 %s 的玩家的QQ是：%s");
+            messages.put("CanNotFoundPlayerIdByUUID", "找不到UUID為 %s 的玩家ID");
+            messages.put("FoundIDForUUID", "UUID為 %s 的玩家ID是：%s");
         } else if ("en_us".equalsIgnoreCase(language)) {
             // English messages
             messages.put("TranslationContributors", "Current language: English (Contributors: Zhang1233)");
@@ -138,6 +146,10 @@ public class LanguageManager {
             messages.put("QQFound", "QQ for player with UID %d is: %s");
             messages.put("QQNotFoundForPlayer", "Unable to find QQ for player %s");
             messages.put("QQFoundForPlayer", "QQ for player %s is: %s");
+            messages.put("QQNotFoundForUUID", "Unable to find QQ for player with UUID %s");
+            messages.put("QQFoundForUUID", "QQ for player with UUID %s is: %s");
+            messages.put("CanNotFoundPlayerIdByUUID", "Unable to find player ID for UUID %s");
+            messages.put("FoundIDForUUID", "Player ID for UUID %s is: %s");
         } else if ("ja_jp".equalsIgnoreCase(language)) {
             // 日本語メッセージ
             messages.put("TranslationContributors", "現在の言語: 日本語 (貢献者: Zhang1233 & TongYi-Lingma LLM)");
@@ -174,6 +186,10 @@ public class LanguageManager {
             messages.put("QQFound", "UID %d のプレイヤーのQQは：%s です");
             messages.put("QQNotFoundForPlayer", "プレイヤー %s のQQ情報が見つかりません");
             messages.put("QQFoundForPlayer", "プレイヤー %s のQQは：%s です");
+            messages.put("QQNotFoundForUUID", "UUID %s のプレイヤーのQQ情報が見つかりません");
+            messages.put("QQFoundForUUID", "UUID %s のプレイヤーのQQは：%s です");
+            messages.put("CanNotFoundPlayerIdByUUID", "UUID %s のプレイヤーIDが見つかりません");
+            messages.put("FoundIDForUUID", "UUID %s のプレイヤーIDは：%s です");
         }
     }
 

@@ -249,6 +249,82 @@ public class GetUID {
         }.runTaskAsynchronously(plugin);
     }
 
+    // 通过UUID查询玩家ID
+    public void findIdByUUID(CommandSender sender, String playerUUID) {
+        sender.sendMessage(languageManager.getMessage("finding"));
+        long startTime = System.currentTimeMillis();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String playerId = null;
+                boolean dbError = false;
+                try {
+                    playerId = getPlayerIdFromUUID(playerUUID);
+                } catch (Exception e) {
+                    dbError = true;
+                }
+
+                String baseMessage = dbError ? languageManager.getMessage("DatabaseError")
+                    : playerId != null
+                        ? String.format(languageManager.getMessage("FoundIDForUUID"), playerUUID, playerId)
+                        : String.format(languageManager.getMessage("CanNotFoundPlayerIdByUUID"), playerUUID);
+
+                long queryTime = System.currentTimeMillis() - startTime;
+                final String message = showQueryTime
+                    ? baseMessage + " " + String.format(languageManager.getMessage("query_time"), queryTime)
+                    : baseMessage;
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        sender.sendMessage(message);
+                    }
+                }.runTask(plugin);
+            }
+        }.runTaskAsynchronously(plugin);
+    }
+
+    // 通过UUID查询QQ
+    public void findQQByUUID(CommandSender sender, String playerUUID) {
+        sender.sendMessage(languageManager.getMessage("finding"));
+        long startTime = System.currentTimeMillis();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String qq = null;
+                boolean dbError = false;
+                try (PreparedStatement ps = connection.prepareStatement(
+                    "SELECT qq FROM " + TABLE_NAME + " WHERE uuid = ?")) {
+                    ps.setString(1, playerUUID);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            qq = rs.getString("qq");
+                        }
+                    }
+                } catch (SQLException e) {
+                    dbError = true;
+                }
+
+                String baseMessage = dbError ? languageManager.getMessage("DatabaseError")
+                    : qq != null && !qq.isEmpty()
+                        ? String.format(languageManager.getMessage("QQFoundForUUID"), playerUUID, qq)
+                        : String.format(languageManager.getMessage("QQNotFoundForUUID"), playerUUID);
+
+                long queryTime = System.currentTimeMillis() - startTime;
+                final String message = showQueryTime
+                    ? baseMessage + " " + String.format(languageManager.getMessage("query_time"), queryTime)
+                    : baseMessage;
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        sender.sendMessage(message);
+                    }
+                }.runTask(plugin);
+            }
+        }.runTaskAsynchronously(plugin);
+    }
+
     // 统一读取UID接口
     public Long getPlayerUIDfromID(String playerId) {
         UUID playerUuid = null;

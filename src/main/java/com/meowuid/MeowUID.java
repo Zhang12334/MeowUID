@@ -252,6 +252,17 @@ public class MeowUID extends JavaPlugin implements Listener {
         GetUID commandGetUID = new GetUID(this, sender, languageManager, connection);
 
         if (args.length >= 2 && args[0].equalsIgnoreCase("FindUIDFrom")) {
+            if (args[1].equalsIgnoreCase("PlayerID") && args.length == 3) {
+                String playerId = args[2];
+                commandGetUID.findUidById(sender, playerId);
+            } else if (args[1].equalsIgnoreCase("PlayerUUID") && args.length == 3) {
+                String playerUUID = args[2];
+                commandGetUID.findUidByUUID(sender, playerUUID);
+            } else {
+                sender.sendMessage(languageManager.getMessage("usage") + " /uid FindUIDFrom <PlayerID/PlayerUUID> <id/uuid>");
+            }
+            return true;
+        } else if (args.length >= 2 && args[0].equalsIgnoreCase("FindIDFrom")) {
             if (args[1].equalsIgnoreCase("PlayerUID") && args.length == 3) {
                 try {
                     long uid = Long.parseLong(args[2]);
@@ -259,8 +270,11 @@ public class MeowUID extends JavaPlugin implements Listener {
                 } catch (NumberFormatException e) {
                     sender.sendMessage(languageManager.getMessage("InvalidUid"));
                 }
+            } else if (args[1].equalsIgnoreCase("PlayerUUID") && args.length == 3) {
+                String playerUUID = args[2];
+                commandGetUID.findIdByUUID(sender, playerUUID);
             } else {
-                sender.sendMessage(languageManager.getMessage("usage") + " /uid FindIDFrom PlayerUID <uid>");
+                sender.sendMessage(languageManager.getMessage("usage") + " /uid FindIDFrom <PlayerUID/PlayerUUID> <uid/uuid>");
             }
             return true;
         } else if (args.length >= 2 && args[0].equalsIgnoreCase("FindQQFrom")) {
@@ -274,8 +288,11 @@ public class MeowUID extends JavaPlugin implements Listener {
             } else if (args[1].equalsIgnoreCase("PlayerID") && args.length == 3) {
                 String playerId = args[2];
                 commandGetUID.findQQById(sender, playerId);
+            } else if (args[1].equalsIgnoreCase("PlayerUUID") && args.length == 3) {
+                String playerUUID = args[2];
+                commandGetUID.findQQByUUID(sender, playerUUID);
             } else {
-                sender.sendMessage(languageManager.getMessage("usage") + " /uid FindQQFrom <PlayerUID/PlayerID> <uid/playerid>");
+                sender.sendMessage(languageManager.getMessage("usage") + " /uid FindQQFrom <PlayerUID/PlayerID/PlayerUUID> <uid/playerid/uuid>");
             }
             return true;
         } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
@@ -303,9 +320,16 @@ public class MeowUID extends JavaPlugin implements Listener {
             completions.add("FindQQFrom");
             completions.add("reload");
         } else if (args.length == 2) {
-            if (args[0].equalsIgnoreCase("FindUIDFrom") || args[0].equalsIgnoreCase("FindIDFrom") || args[0].equalsIgnoreCase("FindQQFrom")) {
+            if (args[0].equalsIgnoreCase("FindUIDFrom")) {
+                completions.add("PlayerID");
+                completions.add("PlayerUUID");
+            } else if (args[0].equalsIgnoreCase("FindIDFrom")) {
+                completions.add("PlayerUID");
+                completions.add("PlayerUUID");
+            } else if (args[0].equalsIgnoreCase("FindQQFrom")) {
                 completions.add("PlayerUID");
                 completions.add("PlayerID");
+                completions.add("PlayerUUID");
             }
         }
         return completions.stream()
