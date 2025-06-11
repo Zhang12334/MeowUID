@@ -20,6 +20,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.meowuid.event.PlayerUIDRegisteredEvent;
+
 public class MeowUID extends JavaPlugin implements Listener {
 
     private Connection connection;
@@ -192,20 +194,34 @@ public class MeowUID extends JavaPlugin implements Listener {
                         ps.setString(1, playerUUID);
                         ResultSet rs = ps.executeQuery();
     
-                        if (!rs.next()) {
+                        boolean isNewRegistration = !rs.next();
+                        long uid;
+                        
+                        if (isNewRegistration) {
                             // 为新玩家分配 UID
-                            long newUid = getNextAvailableUid();
+                            uid = getNextAvailableUid();
                             PreparedStatement insert = connection.prepareStatement(
                                 "INSERT INTO " + TABLE_NAME + " (uuid, uid) VALUES (?, ?)"
                             );
                             insert.setString(1, playerUUID);
-                            insert.setLong(2, newUid);
+                            insert.setLong(2, uid);
                             insert.executeUpdate();
                             insert.close();
-                            getLogger().info(String.format(languageManager.getMessage("RegistUID"), playerId, newUid));
+                            getLogger().info(String.format(languageManager.getMessage("RegistUID"), playerId, uid));
+                        } else {
+                            uid = rs.getLong("uid");
                         }
+                        
                         rs.close();
                         ps.close();
+
+                        // 触发事件
+                        final long finalUid = uid;
+                        final boolean finalIsNewRegistration = isNewRegistration;
+                        Bukkit.getScheduler().runTask(MeowUID.this, () -> {
+                            PlayerUIDRegisteredEvent event = new PlayerUIDRegisteredEvent(player, finalUid, finalIsNewRegistration);
+                            Bukkit.getPluginManager().callEvent(event);
+                        });
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
