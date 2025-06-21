@@ -423,21 +423,7 @@ public class GetUID {
         if (player != null) {
             return player.getUniqueId().toString();
         }
-
-        // 如果不在线，尝试从数据库查询
-        try (PreparedStatement ps = connection.prepareStatement(
-            "SELECT uuid FROM " + TABLE_NAME + " WHERE uuid IN (SELECT uuid FROM " + TABLE_NAME + " WHERE uid IN (SELECT uid FROM " + TABLE_NAME + " WHERE uuid = ?))"
-        )) {
-            ps.setString(1, playerId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("uuid");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getUuidFromPlayerName(playerId).toString();
     }
 
     // 查找指定 UUID 的 UID
